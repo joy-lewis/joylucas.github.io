@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cool Animated Background</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      const particles = [];
+
+      function Particle() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.vx = Math.random() * 10 - 5;
+        this.vy = Math.random() * 10 - 5;
+        this.color = 'rgba(255, 255, 255, ' + Math.random() + ')';
+        this.radius = Math.random() * 3;
+      }
+
+      Particle.prototype.draw = function() {
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fill();
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].x += particles[i].vx;
+          particles[i].y += particles[i].vy;
+          if (particles[i].x > w) particles[i].x = 0;
+          if (particles[i].x < 0) particles[i].x = w;
+          if (particles[i].y > h) particles[i].y = 0;
+          if (particles[i].y < 0) particles[i].y = h;
+          particles[i].draw();
+        }
+        requestAnimationFrame(loop);
+      }
+
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Particle());
+      }
+
+      loop();
+    </script>
+  </body>
+</html>
